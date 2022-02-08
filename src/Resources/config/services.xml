@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <imports>
+        <import resource="services_test.xml"/>
+    </imports>
+
+    <services>
+        <service id="cript_blog.post.repository" class="Cript\BlogBundle\Context\User\Infrastructure\PostMdFileRepository" public="false">
+            <argument type="abstract" />
+            <argument type="service" id="cript_blog.yaml_formatter_parser"/>
+            <argument type="service" id="cript_blog.content_parser"/>
+        </service>
+
+        <service id="cript_blog.yaml_formatter_parser" class="Cript\BlogBundle\Context\User\Application\YamlFormatterParser\Parser" public="false"/>
+        <service id="cript_blog.content_parser" class="Cript\BlogBundle\Context\User\Application\ContentParser\Parser" public="false"/>
+
+        <!--Messenger-->
+        <service id="cript_blog.messenger.query_bus" class="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" public="false">
+            <argument type="service" id="messenger.default_bus"/>
+        </service>
+
+        <service id="cript_blog.query.all_posts" class="Cript\BlogBundle\Context\User\Application\Query\Handler\GetAllPostsHandler">
+            <argument type="service" id="cript_blog.post.repository"/>
+            <argument type="service" id="cript_blog.ordering.collection"/>
+            <tag name="messenger.query_handler" />
+        </service>
+
+        <service id="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" alias="cript_blog.messenger.query_bus"/>
+
+        <!--Ordering-->
+        <instanceof id="Cript\BlogBundle\Context\User\Application\PostOrdering\PostOrderingInterface" autowire="true">
+            <tag name="cript_blog.ordering"/>
+        </instanceof>
+        <service id="cript_blog.ordering.collection" class="Cript\BlogBundle\Context\User\Application\PostOrdering\Collection">
+            <argument type="tagged_iterator" tag="cript_blog.ordering" index-by="alias"/>
+        </service>
+        <service id="cript_blog.ordering.date_asc" class="Cript\BlogBundle\Context\User\Application\PostOrdering\ByDateAsc">
+            <tag name="cript_blog.ordering" alias="date_asc"/>
+        </service>
+        <service id="cript_blog.ordering.date_desc" class="Cript\BlogBundle\Context\User\Application\PostOrdering\ByDateDesc">
+            <tag name="cript_blog.ordering" alias="date_desc"/>
+        </service>
+    </services>
+</container>

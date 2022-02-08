@@ -1,0 +1,34 @@
+{
+    "name": "cript/blog-bundle",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Aleksandr Borodulin",
+            "email": "sashaborodulin@gmail.com"
+        }
+    ],
+    "require": {
+        "erusev/parsedown": "^1.7",
+        "symfony/finder": "^5.4",
+        "php-ds/php-ds": "^1.4"
+    },
+    "require-dev": {
+        "symfony/config": "^5.4",
+        "symfony/dependency-injection": "^5.4",
+        "symfony/http-kernel": "^5.4",
+        "friends-of-behat/symfony-extension": "^2.3",
+        "phpunit/phpunit": "^9.5",
+        "symfony/messenger": "^5.4",
+        "symfony/framework-bundle": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cript\\BlogBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cript\\BlogBundle\\Tests\\": "tests/"
+        }
+    }
+}
