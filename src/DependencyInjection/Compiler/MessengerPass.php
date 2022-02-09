@@ -24,13 +24,6 @@ class MessengerPass implements DependencyInjection\Compiler\CompilerPassInterfac
         }
     }
 
-//    private function processConfiguration(ConfigurationInterface $configuration, array $configs): array
-//    {
-//        $processor = new Processor();
-//
-//        return $processor->processConfiguration($configuration, $configs);
-//    }
-
     private function processTags(DependencyInjection\Definition $definition, string $busName)
     {
         $definition->clearTags();

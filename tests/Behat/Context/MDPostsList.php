@@ -7,14 +7,14 @@ namespace Cript\BlogBundle\Tests\Behat\Context;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Cript\BlogBundle\Context\Shared\Application\Bus\Query\QueryBusInterface;
-use Cript\BlogBundle\Context\User\Application\PostOrdering\Collection;
 use Cript\BlogBundle\Context\User\Application\Query\GetAllPosts;
 use Cript\BlogBundle\Context\User\Domain\Post;
 use PHPUnit\Framework\TestCase;
 
-class PostsList implements Context
+class MDPostsList implements Context
 {
     private array $posts;
+    private \ArrayIterator $loadedPosts;
 
     public function __construct(
         private QueryBusInterface $queryBus
@@ -35,36 +35,41 @@ class PostsList implements Context
     }
 
     /**
-     * @When /^I load list of posts and I should receive (\d+) posts sorted by "([^"]*)"$/
+     * @When /^I load list of posts sorted by (.*)$/
      */
-    public function iLoadListOfPostsAndIShouldReceivePostsSortedBy(int $arg1, string $ordering)
+    public function iLoadListOfPostsSortedBy(string $ordering)
+    {
+        $query = new GetAllPosts($ordering);
+        $this->loadedPosts = $this->queryBus->ask($query);
+    }
+
+    /**
+     * @Then /^I should receive (.*) posts sorted by (.*)$/
+     */
+    public function iShouldReceivePostsSortedBy(int $posts_count, string $ordering)
     {
         $expectedPosts = $this->getExpectedPosts($ordering);
-
-        $query = new GetAllPosts($ordering);
-        $posts = $this->queryBus->ask($query)->orderedByDate();
-
-        TestCase::assertCount($arg1, $posts);
-        $this->assertPosts($expectedPosts, $posts);
+        TestCase::assertCount($posts_count, $this->loadedPosts);
+        $this->assertPosts($expectedPosts, $this->loadedPosts);
     }
 
     private function getExpectedPosts(string $ordering): array
     {
         // "date_desc" by default
         if (empty($ordering)) {
-            return [$this->posts[1], $this->posts[0]];
+            return [end($this->posts), $this->posts[0]];
         }
 
         $posts = [];
 
         switch ($ordering) {
             case 'date_desc':
-                $posts[] = $this->posts[1];
-                $posts[] = $this->posts[0];
+                $posts[] = end($this->posts);
+                $posts[] = reset($this->posts);
                 break;
             case 'date_asc':
-                $posts[] = $this->posts[0];
-                $posts[] = $this->posts[1];
+                $posts[] = reset($this->posts);
+                $posts[] = end($this->posts);
                 break;
         }
 
@@ -74,7 +79,8 @@ class PostsList implements Context
     private function assertPosts(array $expected, \ArrayIterator $posts)
     {
         foreach ($expected as $expectedKey => $expectedPost) {
-            $this->assertPost($expectedPost, $posts[$expectedKey]);
+            $posts->seek($expectedKey);
+            $this->assertPost($expectedPost, $posts->current());
         }
     }
 

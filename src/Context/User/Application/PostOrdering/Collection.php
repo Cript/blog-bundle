@@ -18,11 +18,16 @@ class Collection
         return array_key_exists($name, $this->sorters);
     }
 
-    public function get(?string $name)
+    public function getDefault(): AbstractPostOrdering
+    {
+        // TODO: move default ordering to config
+        return $this->sorters['date_desc'];
+    }
+
+    public function get(?string $name): AbstractPostOrdering
     {
         if (empty($name)) {
-            // TODO: move default ordering to config
-            return $this->sorters['date_desc'];
+            return $this->getDefault();
         }
 
         if (!$this->exists($name)) {

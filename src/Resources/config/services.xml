@@ -19,17 +19,23 @@
         <service id="cript_blog.content_parser" class="Cript\BlogBundle\Context\User\Application\ContentParser\Parser" public="false"/>
 
         <!--Messenger-->
-        <service id="cript_blog.messenger.query_bus" class="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" public="false">
+        <service id="cript_blog.query.bus" class="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" public="false">
             <argument type="service" id="messenger.default_bus"/>
         </service>
 
-        <service id="cript_blog.query.all_posts" class="Cript\BlogBundle\Context\User\Application\Query\Handler\GetAllPostsHandler">
+        <service id="cript_blog.query.handler.all_posts" class="Cript\BlogBundle\Context\User\Application\Query\Handler\GetAllPostsHandler">
             <argument type="service" id="cript_blog.post.repository"/>
             <argument type="service" id="cript_blog.ordering.collection"/>
             <tag name="messenger.query_handler" />
         </service>
 
-        <service id="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" alias="cript_blog.messenger.query_bus"/>
+        <service id="cript_blog.query.handler.post" class="Cript\BlogBundle\Context\User\Application\Query\Handler\GetPostHandler">
+            <argument type="service" id="cript_blog.post.repository"/>
+            <argument type="service" id="cript_blog.ordering.collection"/>
+            <tag name="messenger.query_handler" />
+        </service>
+
+        <service id="Cript\BlogBundle\Context\Shared\Infrastructure\Bus\QueryBus" alias="cript_blog.query.bus"/>
 
         <!--Ordering-->
         <instanceof id="Cript\BlogBundle\Context\User\Application\PostOrdering\PostOrderingInterface" autowire="true">

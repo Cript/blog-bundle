@@ -11,8 +11,13 @@ default:
                 - "%paths.base%/tests/features/demo"
             contexts:
                 - Cript\BlogBundle\Tests\Behat\Context\Demo
-        blog:
+        posts-list:
             paths:
-                - "%paths.base%/tests/features/blog"
+                - "%paths.base%/tests/features/blog/posts-list"
             contexts:
-                - Cript\BlogBundle\Tests\Behat\Context\PostsList
+                - Cript\BlogBundle\Tests\Behat\Context\MDPostsList
+        post-show:
+            paths:
+                - "%paths.base%/tests/features/blog/post-show"
+            contexts:
+                - Cript\BlogBundle\Tests\Behat\Context\MDPostShow

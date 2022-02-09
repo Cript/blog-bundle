@@ -2,7 +2,7 @@
 
 namespace Cript\BlogBundle\Context\User\Application\PostOrdering;
 
-class ByDateDesc extends \SplPriorityQueue implements PostOrderingInterface
+class ByDateDesc extends AbstractPostOrdering
 {
     public function getName(): string
     {

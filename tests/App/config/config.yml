@@ -1,9 +1,7 @@
 framework:
     test: true
+
 cript_blog:
     posts_path: '%kernel.project_dir%/tests/App/posts'
-#    messenger:
-#        command_bus: command_bus
-#        query_bus: query_bus
 
 

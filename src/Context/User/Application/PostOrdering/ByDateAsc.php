@@ -2,9 +2,7 @@
 
 namespace Cript\BlogBundle\Context\User\Application\PostOrdering;
 
-use JetBrains\PhpStorm\Internal\LanguageLevelTypeAware;
-
-class ByDateAsc extends \SplPriorityQueue implements PostOrderingInterface
+class ByDateAsc extends AbstractPostOrdering
 {
     public function compare(mixed $priority1, mixed $priority2): int
     {
@@ -13,7 +11,7 @@ class ByDateAsc extends \SplPriorityQueue implements PostOrderingInterface
         }
 
         if ($priority1 > $priority2) {
-            return 0;
+            return -1;
         }
 
         return 0;

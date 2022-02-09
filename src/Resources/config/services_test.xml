@@ -9,8 +9,12 @@
             <argument type="string">%kernel.environment%</argument>
         </service>
 
-        <service id="Cript\BlogBundle\Tests\Behat\Context\PostsList" public="true">
-            <argument type="service" id="cript_blog.messenger.query_bus" />
+        <service id="Cript\BlogBundle\Tests\Behat\Context\MDPostsList" public="true">
+            <argument type="service" id="cript_blog.query.bus" />
+        </service>
+
+        <service id="Cript\BlogBundle\Tests\Behat\Context\MDPostShow" public="true">
+            <argument type="service" id="cript_blog.query.bus" />
         </service>
     </services>
 </container>
